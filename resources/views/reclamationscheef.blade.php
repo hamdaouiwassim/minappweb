@@ -126,6 +126,7 @@
                         <th>Date </th>
                         <th>Description</th>
                         <th style="width: 40px">Title</th>
+                        
                         <th> Etat </th>
                         
                         

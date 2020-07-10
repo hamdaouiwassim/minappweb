@@ -128,6 +128,7 @@
                         <th>Date </th>
                         <th>Description</th>
                         <th style="width: 40px">Title</th>
+                        <th> Image </th>
                         <th> Periorite </th>
                         <th>Actions</th>
                         
@@ -141,6 +142,9 @@
                             Description de reclamation
                         </td>
                         <td><span class="badge bg-danger">chiens lâches</span></td>
+                        <td><button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default">
+                          Afficher Image
+                        </button></td>
                         <td> Urgent </td>
                         <td><button class="btn btn-primary">valider</button></td>
                         
@@ -170,6 +174,8 @@
                         </td>
                         <td><span class="badge bg-danger">chiens lâches</span></td>
                         <td><button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default">
+                          Afficher Image
+                        </button></td>
                         <td> Urgent </td>
                         <td><button class="btn btn-primary">valider</button></td>
                       
@@ -182,7 +188,9 @@
                             Description de reclamation
                         </td>
                         <td><span class="badge bg-danger">chiens lâches</span></td>
-                                                  Afficher Image
+                        <td><button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default">
+                          Afficher Image
+                        </button></td>
                         <td> Urgent </td>
                         <td><button class="btn btn-primary">valider</button></td>
                         
@@ -195,7 +203,9 @@
                             Description de reclamation
                         </td>
                         <td><span class="badge bg-danger">chiens lâches</span></td>
-                                                </button></td>
+                        <td><button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default">
+                          Afficher Image
+                        </button></td>
                         <td> Urgent </td>
                         <td><button class="btn btn-primary">valider</button></td>
                        
