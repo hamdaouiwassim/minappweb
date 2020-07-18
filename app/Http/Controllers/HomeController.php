@@ -24,15 +24,9 @@ class HomeController extends Controller
     public function index()
     {
         if ( auth()->user()->roles == "admin" ){
-            return view('home');
+           return redirect('/admin/reclamations/encours');
         }
-        return view('reclamationscheefenc');
+        return redirect('/cheef/reclamations/encours');
     }
-    public function reclamationsnt(){
-        if ( auth()->user()->roles == "admin" ){
-            return view('reclamationsnt');
-        }
-        return view('reclamationscheef');
-        
-    }
+    
 }

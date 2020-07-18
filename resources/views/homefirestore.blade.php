@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title> Minicipalite App</title>
+  <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -36,7 +37,7 @@
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="index3.html" class="brand-link">
-      <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <img src="{{ asset('dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">Minicipalite App</span>
     </a>
 
@@ -45,7 +46,7 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+          <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
           <a href="#" class="d-block">{{ Auth::user()->name }}</a>
@@ -67,19 +68,31 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="/home" class="nav-link active">
+                  <a href="/admin/reclamations/encours" class="nav-link active">
                     <i class="far fa-circle nav-icon"></i>
                     <p> Reclamations En cours </p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="/reclamationsnt" class="nav-link">
+                  <a href="/admin/reclamations/traitee" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Reclamations Traites</p>
                   </a>
                 </li>
                 
               </ul>
+            </li>
+            <li class="nav-item">
+              <a class="dropdown-item" href="{{ route('logout') }}"
+                        onclick="event.preventDefault();
+                                      document.getElementById('logout-form').submit();">
+                        {{ __('Logout') }}
+                    </a>
+
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+              
             </li>
            
            
@@ -134,131 +147,55 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>1.</td>
-                        <td>10/07/2020</td>
-                        <td>
-                            Description de reclamation
-                        </td>
-                        <td><span class="badge bg-danger">chiens lâches</span></td>
-                        
-                        <td><button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default">
-                          Afficher Image
-                        </button></td>
-                        <td>
-                            <form action="" class="form-inline" method="post">
-                                <select class="form-control">
-                                    <option value=""> Tres Urgent </option>
-                                    <option value=""> Urgent </option>
-                                    <option>Normal </option>
-                                </select>
-                                <button class="btn btn-primary ml-2">Valider</button>
-                            </form>
-                            
-                        </td>
-                        <td><button class="btn btn-danger ml-2"><i class="nav-icon fas fa-trash"></i></button></td>
-                        
-                      </tr>
+                        @php
+                        $i = 1    
+                        @endphp
 
+                        
+                        
+                        @foreach($reclamations as $rec )
+                   
+                        
                       <tr>
-                        <td>1.</td>
-                        <td>10/07/2020</td>
+                        <td>{{ $i }}</td>
+                        <td>{{ $rec['date'] }}</td>
                         <td>
-                            Description de reclamation
+                            {{ $rec['description'] }}
                         </td>
-                        <td><span class="badge bg-danger">chiens lâches</span></td>
-                          <td><button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default">
+                        <td><span class="badge bg-danger">{{ $rec['title'] }}</span></td>
+                        
+                        <td><button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default{{ $i }}">
                           Afficher Image
                         </button></td>
                         <td>
-                            <form action="" class="form-inline" method="post">
-                                <select class="form-control">
-                                    <option value=""> Tres Urgent </option>
-                                    <option value=""> Urgent </option>
-                                    <option>Normal </option>
+                        <form action="{{ route('addPeriorite') }}" class="form-inline" method="post">
+                          @csrf
+                            <input type="hidden" name="idreclamation" value="{{ $rec['id']  }}" >
+                                <select class="form-control" name="periorite">
+                                    <option value="Tres Urgent"> Tres Urgent </option>
+                                    <option value="Urgent"> Urgent </option>
+                                    <option value="Normal">Normal </option>
                                 </select>
                                 <button class="btn btn-primary ml-2">Valider</button>
                             </form>
                             
                         </td>
-                         <td><button class="btn btn-danger ml-2"><i class="nav-icon fas fa-trash"></i></button></td>
+                        <td><a onclick="return confirm('voulez-vous vraiment supprimer cette reclamation?')" href="/document/{{ $rec['id'] }}/delete" class="btn btn-danger ml-2"><i class="nav-icon fas fa-trash"></i></a></td>
                         
                       </tr>
+                          @php
+                          $i++    
+                        @endphp
 
-                      <tr>
-                        <td>2.</td>
-                        <td>10/07/2020</td>
-                        <td>
-                            Description de reclamation
-                        </td>
-                        <td><span class="badge bg-danger">chiens lâches</span></td>
-                          <td><button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default">
-                          Afficher Image
-                        </button></td>
-                        <td>
-                            <form action="" class="form-inline" method="post">
-                                <select class="form-control">
-                                    <option value=""> Tres Urgent </option>
-                                    <option value=""> Urgent </option>
-                                    <option>Normal </option>
-                                </select>
-                                <button class="btn btn-primary ml-2">Valider</button>
-                            </form>
-                            
-                        </td>
-                         <td><button class="btn btn-danger ml-2"><i class="nav-icon fas fa-trash"></i></button></td>
-                        
-                      </tr>
+               
+                       
+                      @endforeach
 
-                      <tr>
-                        <td>3.</td>
-                        <td>10/07/2020</td>
-                        <td>
-                            Description de reclamation
-                        </td>
-                        <td><span class="badge bg-danger">chiens lâches</span></td>
-                          <td><button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default">
-                          Afficher Image
-                        </button></td>
-                        <td>
-                            <form action="" class="form-inline" method="post">
-                                <select class="form-control">
-                                    <option value=""> Tres Urgent </option>
-                                    <option value=""> Urgent </option>
-                                    <option>Normal </option>
-                                </select>
-                                <button class="btn btn-primary ml-2">Valider</button>
-                            </form>
-                            
-                        </td>
-                         <td><button class="btn btn-danger ml-2"><i class="nav-icon fas fa-trash"></i></button></td>
-                        
-                      </tr>
+                     
+                  
 
-                      <tr>
-                        <td>4.</td>
-                        <td>10/07/2020</td>
-                        <td>
-                            Description de reclamation
-                        </td>
-                        <td><span class="badge bg-danger">chiens lâches</span></td>
-                          <td><button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default">
-                          Afficher Image
-                        </button></td>
-                        <td>
-                            <form action="" class="form-inline" method="post">
-                                <select class="form-control">
-                                    <option value=""> Tres Urgent </option>
-                                    <option value=""> Urgent </option>
-                                    <option>Normal </option>
-                                </select>
-                                <button class="btn btn-primary ml-2">Valider</button>
-                            </form>
-                            
-                        </td>
-                         <td><button class="btn btn-danger ml-2"><i class="nav-icon fas fa-trash"></i></button></td>
-                        
-                      </tr>
+                 
+                     
                       
                     </tbody>
                   </table>
@@ -284,7 +221,12 @@
   <!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
-<div class="modal fade" id="modal-default">
+@php
+$i = 1    
+@endphp
+@foreach($reclamations as $rec )
+
+<div class="modal fade" id="modal-default{{$i}}" >
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -293,8 +235,8 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-        <img src="" >
+      <div class="modal-body" style="overflow: hidden">
+      <img src="{{ $rec['photo'] }}"  style="width:100%">
       </div>
       <div class="modal-footer justify-content-between">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -306,6 +248,10 @@
   <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
+@php
+$i++    
+@endphp
+@endforeach
 <!-- jQuery -->
 <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
 <!-- jQuery UI 1.11.4 -->

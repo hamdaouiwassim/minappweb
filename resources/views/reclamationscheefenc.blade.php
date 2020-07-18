@@ -36,7 +36,7 @@
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="index3.html" class="brand-link">
-      <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <img src="{{ asset('dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">Minicipalite App</span>
     </a>
 
@@ -45,7 +45,7 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+          <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
           <a href="#" class="d-block">{{ Auth::user()->name }}</a>
@@ -67,19 +67,31 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/home" class="nav-link">
+                <a href="/home" class="nav-link active">
                   <i class="far fa-circle nav-icon"></i>
                   <p> Reclamations En cours </p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/reclamationsnt" class="nav-link active">
+                <a href="/reclamationsnt" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Reclamations Traites</p>
                 </a>
               </li>
               
             </ul>
+          </li>
+          <li class="nav-item">
+            <a class="dropdown-item" href="{{ route('logout') }}"
+                      onclick="event.preventDefault();
+                                    document.getElementById('logout-form').submit();">
+                      {{ __('Logout') }}
+                  </a>
+
+                  <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                      @csrf
+                  </form>
+            
           </li>
          
          
@@ -135,82 +147,37 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>1.</td>
-                        <td>10/07/2020</td>
-                        <td>
-                            Description de reclamation
-                        </td>
-                        <td><span class="badge bg-danger">chiens lâches</span></td>
-                        <td><button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default">
-                          Afficher Image
-                        </button></td>
-                        <td> Urgent </td>
-                        <td><button class="btn btn-primary">valider</button></td>
-                        
-                      </tr>
 
-                      <tr>
-                        <td>2.</td>
-                        <td>10/07/2020</td>
-                        <td>
-                            Description de reclamation
-                        </td>
-                        <td><span class="badge bg-danger">chiens lâches</span></td>
-                        <td><button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default">
-                          Afficher Image
-                        </button></td>
-                        <td> Urgent </td>
-                        <td><button class="btn btn-primary">valider</button></td>
-                       
-                        
-                      </tr>
 
-                      <tr>
-                        <td>3.</td>
-                        <td>10/07/2020</td>
-                        <td>
-                            Description de reclamation
-                        </td>
-                        <td><span class="badge bg-danger">chiens lâches</span></td>
-                        <td><button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default">
-                          Afficher Image
-                        </button></td>
-                        <td> Urgent </td>
-                        <td><button class="btn btn-primary">valider</button></td>
-                      
-                        
-                      </tr>
-                      <tr>
-                        <td>4.</td>
-                        <td>10/07/2020</td>
-                        <td>
-                            Description de reclamation
-                        </td>
-                        <td><span class="badge bg-danger">chiens lâches</span></td>
-                        <td><button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default">
-                          Afficher Image
-                        </button></td>
-                        <td> Urgent </td>
-                        <td><button class="btn btn-primary">valider</button></td>
-                        
-                        
-                      </tr>
-                      <tr>
-                        <td>1.</td>
-                        <td>10/07/2020</td>
-                        <td>
-                            Description de reclamation
-                        </td>
-                        <td><span class="badge bg-danger">chiens lâches</span></td>
-                        <td><button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default">
-                          Afficher Image
-                        </button></td>
-                        <td> Urgent </td>
-                        <td><button class="btn btn-primary">valider</button></td>
-                       
-                        
-                      </tr>
+                      @php
+                      $i = 1    
+                      @endphp
+                      @foreach($reclamations as $rec )
+                          @foreach($reclamationsDb as $recDb )
+                                @if ($rec['id'] == $recDb['idreclamation'])
+                                <tr>
+                                  <td>{{ $i }}</td>
+                                  <td>{{$rec['date']}}</td>
+                                  <td>
+                                    {{$rec['description']}}
+                                  </td>
+                                  <td><span class="badge bg-danger">{{$rec['title']}}</span></td>
+                                <td><button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default{{$i}}">
+                                    Afficher Image
+                                  </button></td>
+                                  <td> {{ $recDb['periorite'] }} </td>
+                                  <td><a href="/reclamation/{{ $rec['id'] }}/valide" class="btn btn-primary">valider</a></td>
+                                  
+                                </tr>
+
+                                @php
+                                $i++    
+                              @endphp
+                            @endif
+                            @endforeach
+
+                     
+                    @endforeach
                     </tbody>
                   </table>
                 </div>
@@ -236,7 +203,14 @@
   <!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
-<div class="modal fade" id="modal-default">
+
+@php
+$i = 1    
+@endphp
+@foreach($reclamations as $rec )
+    @foreach($reclamationsDb as $recDb )
+          @if ($rec['id'] == $recDb['idreclamation'])
+<div class="modal fade" id="modal-default{{$i}}">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -245,8 +219,8 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-        <img src="" >
+      <div class="modal-body" style="overflow: hidden">
+        <img src="{{ $rec['photo'] }}"  style="width:100%">
       </div>
       <div class="modal-footer justify-content-between">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -257,6 +231,13 @@
   </div>
   <!-- /.modal-dialog -->
 </div>
+
+@php
+$i++    
+@endphp
+@endif
+@endforeach
+@endforeach
 <!-- jQuery -->
 <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
 <!-- jQuery UI 1.11.4 -->
